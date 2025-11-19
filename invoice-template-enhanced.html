@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فاتورة</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: A4;
+            margin: 10mm;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Tahoma', 'Arial', sans-serif;
+            background: #ffffff;
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .invoice-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        /* Header Section with Logo */
+        .invoice-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .building-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .building-info h1 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .building-info p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .invoice-title {
+            text-align: left;
+        }
+
+        .invoice-title h2 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .invoice-title p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Invoice Details Grid */
+        .invoice-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .detail-item {
+            text-align: center;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        /* Parties Section */
+        .parties-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+            background: white;
+        }
+
+        .party-box {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .party-box h3 {
+            color: #667eea;
+            font-size: 18px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .party-box p {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .party-box strong {
+            color: #495057;
+            display: inline-block;
+            min-width: 100px;
+        }
+
+        /* Items Table */
+        .items-section {
+            padding: 30px;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .items-table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .items-table th {
+            padding: 15px;
+            text-align: right;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .items-table tbody tr {
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .items-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .items-table td {
+            padding: 15px;
+            text-align: right;
+            font-size: 14px;
+        }
+
+        .items-table .item-description {
+            color: #495057;
+        }
+
+        .items-table .item-amount {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        /* Summary Section */
+        .summary-section {
+            background: #f8f9fa;
+            padding: 20px 30px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-size: 14px;
+        }
+
+        .summary-row.total {
+            border-top: 2px solid #667eea;
+            margin-top: 10px;
+            padding-top: 15px;
+        }
+
+        .summary-row.total .summary-label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .summary-row.total .summary-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        /* Notes Section */
+        .notes-section {
+            padding: 30px;
+            background: #fff3cd;
+            border-right: 4px solid #ffc107;
+        }
+
+        .notes-section h4 {
+            color: #856404;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .notes-section p {
+            color: #856404;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        /* Footer */
+        .invoice-footer {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            text-align: center;
+        }
+
+        .invoice-footer p {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .invoice-footer strong {
+            font-size: 16px;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                padding: 0;
+            }
+
+            .invoice-container {
+                border: none;
+                border-radius: 0;
+            }
+
+            .invoice-header,
+            .invoice-footer {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <!-- Header with Logo -->
+        <div class="invoice-header">
+            <div class="logo-section">
+                <img id="buildingLogo" class="building-logo" src="" alt="شعار المبنى">
+                <div class="building-info">
+                    <h1><span id="buildingName">اسم المبنى السكني</span></h1>
+                    <p><span id="buildingAddress">عنوان المبنى</span></p>
+                    <p>📞 <span id="managerPhone">N/A</span></p>
+                </div>
+            </div>
+            <div class="invoice-title">
+                <h2>فاتورة</h2>
+                <p>INVOICE</p>
+            </div>
+        </div>
+
+        <!-- Invoice Details -->
+        <div class="invoice-details">
+            <div class="detail-item">
+                <div class="detail-label">رقم الفاتورة</div>
+                <div class="detail-value"><span id="invoiceNumber">INV-000000</span></div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">التاريخ</div>
+                <div class="detail-value"><span id="invoiceDate">2024-01-01</span></div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">تاريخ الاستحقاق</div>
+                <div class="detail-value"><span id="dueDate">2024-01-31</span></div>
+            </div>
+        </div>
+
+        <!-- Parties Section -->
+        <div class="parties-section">
+            <div class="party-box">
+                <h3>المستأجر</h3>
+                <p><strong>الاسم:</strong> <span id="residentName">غير محدد</span></p>
+                <p><strong>رقم الوحدة:</strong> <span id="unitNumber">N/A</span></p>
+                <p><strong>رقم العقد:</strong> <span id="contractID">N/A</span></p>
+                <p><strong>الهاتف:</strong> <span id="residentPhone">N/A</span></p>
+            </div>
+            <div class="party-box">
+                <h3>تفاصيل الدفع</h3>
+                <p><strong>الفترة الإيجارية:</strong> <span id="rentalPeriod">N/A</span></p>
+                <p><strong>حالة الدفع:</strong> <span id="paymentStatus">مدفوع</span></p>
+                <p><strong>طريقة الدفع:</strong> <span id="paymentMethod">نقدي</span></p>
+            </div>
+        </div>
+
+        <!-- Items Table -->
+        <div class="items-section">
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th>الإجمالي</th>
+                        <th>الكمية</th>
+                        <th>الوصف</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="item-amount"><span id="itemAmount">0.00</span> <span id="currency1">SAR</span></td>
+                        <td>1</td>
+                        <td class="item-description"><span id="itemDescription">وصف العنصر</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="summary-section">
+            <div class="summary-row">
+                <span class="summary-label">المجموع الفرعي:</span>
+                <span class="summary-value"><span id="subTotal">0.00</span> <span id="currency2">SAR</span></span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">الخصم:</span>
+                <span class="summary-value"><span id="discount">0.00</span> <span id="currency3">SAR</span></span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">الضريبة:</span>
+                <span class="summary-value"><span id="tax">0.00</span> <span id="currency4">SAR</span></span>
+            </div>
+            <div class="summary-row total">
+                <span class="summary-label">الإجمالي النهائي:</span>
+                <span class="summary-value"><span id="grandTotal">0.00</span> <span id="currency5">SAR</span></span>
+            </div>
+        </div>
+
+        <!-- Notes Section -->
+        <div class="notes-section">
+            <h4>ملاحظات مهمة</h4>
+            <p><span id="invoiceNotes">يرجى دفع المبلغ المستحق قبل تاريخ الاستحقاق لتجنب رسوم التأخير. شكراً لتعاونكم.</span></p>
+        </div>
+
+        <!-- Footer -->
+        <div class="invoice-footer">
+            <p><strong>للاستفسارات:</strong></p>
+            <p><span id="footerManagerName">المدير</span> - <span id="footerManagerPhone">N/A</span></p>
+            <p style="margin-top: 10px; font-size: 12px; opacity: 0.8;">شكراً لثقتكم بنا</p>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -3,756 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة المباني السكنية - النسخة المتكاملة</title>
+    <title>نظام إدارة المباني السكنية</title>
+    <link rel="stylesheet" href="enhanced-style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* ========== متغيرات CSS الأساسية ========== */
-        :root {
-            --primary-color: #4299e1;
-            --primary-light: #63b3ed;
-            --primary-dark: #3182ce;
-            --secondary-color: #667eea;
-            --accent-color: #f093fb;
-            --success-color: #48bb78;
-            --warning-color: #ed8936;
-            --error-color: #f56565;
-            --info-color: #4299e1;
-            
-            --bg-primary: #f0f4f8;
-            --bg-secondary: #ffffff;
-            --bg-card: #ffffff;
-            --text-primary: #1a202c;
-            --text-secondary: #2d3748;
-            --text-muted: #718096;
-            --border-color: #e2e8f0;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-        }
-
-        /* ========== شاشة تسجيل الدخول ========== */
-        .login-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
-        }
-
-        .login-card {
-            background: white;
-            padding: 50px 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            max-width: 450px;
-            width: 100%;
-            text-align: center;
-        }
-
-        .login-header .logo {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 36px;
-            color: white;
-        }
-
-        .login-header h1 {
-            font-size: 28px;
-            color: var(--text-primary);
-            margin-bottom: 10px;
-        }
-
-        .login-header p {
-            color: var(--text-muted);
-            margin-bottom: 30px;
-        }
-
-        .input-group {
-            margin-bottom: 25px;
-            text-align: right;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--text-secondary);
-        }
-
-        .input-wrapper {
-            position: relative;
-        }
-
-        .input-wrapper input {
-            width: 100%;
-            padding: 15px 45px 15px 15px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            font-size: 16px;
-            font-family: 'Cairo', sans-serif;
-            transition: all 0.3s;
-        }
-
-        .input-wrapper input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
-        }
-
-        .input-wrapper i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .login-footer {
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
-            color: var(--text-muted);
-            font-size: 14px;
-        }
-
-        /* ========== التطبيق الرئيسي ========== */
-        .app-container {
-            display: none;
-        }
-
-        .app-container.active {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* ========== الشريط الجانبي ========== */
-        .sidebar {
-            width: 280px;
-            background: var(--bg-secondary);
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 100;
-        }
-
-        .sidebar-header {
-            padding: 25px 20px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .sidebar-header .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--primary-color);
-        }
-
-        .sidebar-header .logo i {
-            font-size: 28px;
-        }
-
-        .sidebar-nav {
-            flex: 1;
-            padding: 20px 0;
-        }
-
-        .nav-menu {
-            list-style: none;
-        }
-
-        .nav-item {
-            margin-bottom: 5px;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 14px 20px;
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: all 0.3s;
-            border-right: 3px solid transparent;
-        }
-
-        .nav-link:hover {
-            background: var(--bg-primary);
-            color: var(--primary-color);
-        }
-
-        .nav-item.active .nav-link {
-            background: linear-gradient(90deg, rgba(66, 153, 225, 0.1) 0%, transparent 100%);
-            color: var(--primary-color);
-            border-right-color: var(--primary-color);
-            font-weight: 600;
-        }
-
-        .nav-link i {
-            font-size: 20px;
-            width: 24px;
-        }
-
-        /* ========== المحتوى الرئيسي ========== */
-        .main-content {
-            flex: 1;
-            margin-right: 280px;
-            padding: 30px;
-            background: var(--bg-primary);
-        }
-
-        .page-header {
-            background: var(--bg-secondary);
-            padding: 25px 30px;
-            border-radius: 15px;
-            box-shadow: var(--shadow);
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .page-header h1 {
-            font-size: 28px;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .page-header h1 i {
-            color: var(--primary-color);
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-family: 'Cairo', sans-serif;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(66, 153, 225, 0.4);
-        }
-
-        .btn-success {
-            background: var(--success-color);
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--error-color);
-            color: white;
-        }
-
-        .btn-warning {
-            background: var(--warning-color);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: var(--text-muted);
-            color: white;
-        }
-
-        /* ========== البطاقات ========== */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: var(--shadow-lg);
-            transition: transform 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-card h3 {
-            font-size: 14px;
-            margin-bottom: 15px;
-            opacity: 0.9;
-            font-weight: 500;
-        }
-
-        .stat-card .value {
-            font-size: 42px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .stat-card .icon {
-            font-size: 48px;
-            opacity: 0.3;
-            position: absolute;
-            left: 20px;
-            bottom: 20px;
-        }
-
-        .stat-card {
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* ========== الجداول ========== */
-        .table-container {
-            background: var(--bg-secondary);
-            border-radius: 15px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        table thead {
-            background: var(--bg-primary);
-        }
-
-        table th {
-            padding: 18px 20px;
-            text-align: right;
-            font-weight: 600;
-            color: var(--text-primary);
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        table td {
-            padding: 16px 20px;
-            text-align: right;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-secondary);
-        }
-
-        table tbody tr:hover {
-            background: var(--bg-primary);
-        }
-
-        table tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        .action-btn {
-            padding: 8px 16px;
-            margin: 0 4px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn-edit {
-            background: var(--warning-color);
-            color: white;
-        }
-
-        .btn-delete {
-            background: var(--error-color);
-            color: white;
-        }
-
-        .btn-view {
-            background: var(--info-color);
-            color: white;
-        }
-
-        /* ========== النماذج ========== */
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--text-secondary);
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid var(--border-color);
-            border-radius: 10px;
-            font-size: 16px;
-            font-family: 'Cairo', sans-serif;
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
-        }
-
-        /* ========== المودال ========== */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            max-width: 700px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .modal-header h2 {
-            font-size: 24px;
-            color: var(--text-primary);
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 32px;
-            cursor: pointer;
-            color: var(--text-muted);
-            transition: color 0.3s;
-        }
-
-        .close-btn:hover {
-            color: var(--error-color);
-        }
-
-        /* ========== الإشعارات ========== */
-        .notification {
-            position: fixed;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 18px 30px;
-            border-radius: 12px;
-            box-shadow: var(--shadow-lg);
-            z-index: 2000;
-            display: none;
-            font-weight: 600;
-            font-size: 16px;
-            min-width: 300px;
-            text-align: center;
-        }
-
-        .notification.show {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-
-        .notification.success {
-            background: var(--success-color);
-            color: white;
-        }
-
-        .notification.error {
-            background: var(--error-color);
-            color: white;
-        }
-
-        .notification.info {
-            background: var(--info-color);
-            color: white;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-        }
-
-        /* ========== الصفحات ========== */
-        .page {
-            display: none;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        /* ========== بطاقات الدفعات المحسنة ========== */
-        .payments-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .payment-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: var(--shadow);
-            transition: all 0.3s;
-            border-right: 4px solid var(--primary-color);
-        }
-
-        .payment-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .payment-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .payment-amount {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--primary-color);
-        }
-
-        .payment-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, rgba(66, 153, 225, 0.2) 0%, rgba(102, 126, 234, 0.2) 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            color: var(--primary-color);
-        }
-
-        .payment-info {
-            margin-bottom: 15px;
-        }
-
-        .payment-info h4 {
-            font-size: 18px;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-
-        .payment-status {
-            display: inline-block;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            margin-top: 10px;
-        }
-
-        .status-paid {
-            background: rgba(72, 187, 120, 0.2);
-            color: var(--success-color);
-        }
-
-        .status-pending {
-            background: rgba(237, 137, 54, 0.2);
-            color: var(--warning-color);
-        }
-
-        .status-overdue {
-            background: rgba(245, 101, 101, 0.2);
-            color: var(--error-color);
-        }
-
-        /* ========== Responsive ========== */
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(100%);
-                transition: transform 0.3s;
-            }
-
-            .sidebar.mobile-open {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-right: 0;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .payments-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .page-header {
-                flex-direction: column;
-                gap: 15px;
-            }
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* ========== تحسينات إضافية ========== */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-muted);
-        }
-
-        .empty-state i {
-            font-size: 64px;
-            margin-bottom: 20px;
-            opacity: 0.3;
-        }
-
-        .empty-state h3 {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .badge-success {
-            background: rgba(72, 187, 120, 0.2);
-            color: var(--success-color);
-        }
-
-        .badge-warning {
-            background: rgba(237, 137, 54, 0.2);
-            color: var(--warning-color);
-        }
-
-        .badge-danger {
-            background: rgba(245, 101, 101, 0.2);
-            color: var(--error-color);
-        }
-
-        .badge-info {
-            background: rgba(66, 153, 225, 0.2);
-            color: var(--info-color);
-        }
-    </style>
 </head>
-<body>
-    <!-- Notification -->
-    <div id="notification" class="notification"></div>
-
+<body data-theme="light" data-font-size="normal" data-sidebar-position="right">
     <!-- Login Screen -->
     <div id="loginScreen" class="login-container">
         <div class="login-card">
@@ -767,7 +25,7 @@
                 <div class="input-group">
                     <label for="password">كلمة المرور</label>
                     <div class="input-wrapper">
-                        <input type="password" id="password" name="password" placeholder="أدخل كلمة المرور" required autocomplete="current-password">
+                        <input type="password" id="password" name="password" placeholder="أدخل كلمة المرور" required>
                         <i class="fas fa-lock"></i>
                     </div>
                 </div>
@@ -777,13 +35,13 @@
                 </button>
             </form>
             <div class="login-footer">
-                <p>كلمة المرور الافتراضية: <strong style="color: var(--primary-color);">123</strong></p>
+                <p>كلمة المرور الافتراضية</p>
             </div>
         </div>
     </div>
 
     <!-- Main Application -->
-    <div id="mainApp" class="app-container">
+    <div id="mainApp" class="app-container" style="display: none;">
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
@@ -791,6 +49,9 @@
                     <i class="fas fa-building"></i>
                     <span>إدارة المباني</span>
                 </div>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
             
             <nav class="sidebar-nav">
@@ -804,13 +65,13 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link" data-page="units">
                             <i class="fas fa-home"></i>
-                            <span>إدارة الوحدات</span>
+                            <span>إدارة الشقق</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link" data-page="residents">
                             <i class="fas fa-users"></i>
-                            <span>إدارة المقيمون</span>
+                            <span>إدارة السكان</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -822,7 +83,7 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link" data-page="payments">
                             <i class="fas fa-credit-card"></i>
-                            <span>إدارة الدفعات</span>
+                            <span>إدارة المدفوعات</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -832,9 +93,15 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="#" class="nav-link" data-page="inventory">
+                            <i class="fas fa-boxes"></i>
+                            <span>إدارة المخزون</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="#" class="nav-link" data-page="reports">
-                            <i class="fas fa-chart-line"></i>
-                            <span>التقارير والتحليلات</span>
+                            <i class="fas fa-chart-bar"></i>
+                            <span>التقارير والإحصائيات</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -845,9 +112,9 @@
                     </li>
                 </ul>
             </nav>
-
-            <div style="padding: 20px; border-top: 1px solid var(--border-color);">
-                <button class="btn btn-danger" style="width: 100%;" onclick="app.logout()">
+            
+            <div class="sidebar-footer">
+                <button class="logout-btn" id="logoutBtn">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>تسجيل الخروج</span>
                 </button>
@@ -856,1172 +123,128 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Dashboard Page -->
-            <div id="dashboard" class="page active">
-                <div class="page-header">
-                    <h1><i class="fas fa-tachometer-alt"></i> لوحة التحكم</h1>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3>إجمالي الوحدات</h3>
-                        <div class="value" id="totalUnits">0</div>
-                        <i class="fas fa-home icon"></i>
-                    </div>
-                    <div class="stat-card" style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);">
-                        <h3>الوحدات المؤجرة</h3>
-                        <div class="value" id="rentedUnits">0</div>
-                        <i class="fas fa-check-circle icon"></i>
-                    </div>
-                    <div class="stat-card" style="background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);">
-                        <h3>إجمالي المقيمون</h3>
-                        <div class="value" id="totalResidents">0</div>
-                        <i class="fas fa-users icon"></i>
-                    </div>
-                    <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                        <h3>الإيرادات الشهرية</h3>
-                        <div class="value" id="monthlyRevenue">0</div>
-                        <i class="fas fa-dollar-sign icon"></i>
-                    </div>
-                </div>
-
-                <div class="table-container">
-                    <div style="padding: 25px; border-bottom: 1px solid var(--border-color);">
-                        <h2 style="font-size: 20px; color: var(--text-primary);">
-                            <i class="fas fa-clock" style="color: var(--primary-color); margin-left: 10px;"></i>
-                            آخر الأنشطة
-                        </h2>
-                    </div>
-                    <div id="recentActivities" style="padding: 25px;">
-                        <div class="empty-state">
-                            <i class="fas fa-inbox"></i>
-                            <h3>لا توجد أنشطة حديثة</h3>
-                            <p>ابدأ بإضافة وحدات ومقيمين لرؤية الأنشطة هنا</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Units Page -->
-            <div id="units" class="page">
-                <div class="page-header">
-                    <h1><i class="fas fa-home"></i> إدارة الوحدات</h1>
-                    <button class="btn btn-primary" onclick="app.showAddUnitModal()">
-                        <i class="fas fa-plus"></i>
-                        <span>إضافة وحدة جديدة</span>
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
                     </button>
-                </div>
-
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>رقم الوحدة</th>
-                                <th>النوع</th>
-                                <th>المساحة</th>
-                                <th>الإيجار الشهري</th>
-                                <th>الحالة</th>
-                                <th>الإجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="unitsTableBody">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Residents Page -->
-            <div id="residents" class="page">
-                <div class="page-header">
-                    <h1><i class="fas fa-users"></i> إدارة المقيمون</h1>
-                    <button class="btn btn-primary" onclick="app.showAddResidentModal()">
-                        <i class="fas fa-plus"></i>
-                        <span>إضافة مقيم جديد</span>
-                    </button>
-                </div>
-
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>الاسم</th>
-                                <th>رقم الهاتف</th>
-                                <th>البريد الإلكتروني</th>
-                                <th>رقم الوحدة</th>
-                                <th>الإجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="residentsTableBody">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Contracts Page -->
-            <div id="contracts" class="page">
-                <div class="page-header">
-                    <h1><i class="fas fa-file-contract"></i> إدارة العقود</h1>
-                    <button class="btn btn-primary" onclick="app.showAddContractModal()">
-                        <i class="fas fa-plus"></i>
-                        <span>إضافة عقد جديد</span>
-                    </button>
-                </div>
-
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>رقم العقد</th>
-                                <th>المستأجر</th>
-                                <th>الوحدة</th>
-                                <th>تاريخ البداية</th>
-                                <th>تاريخ الانتهاء</th>
-                                <th>القيمة الشهرية</th>
-                                <th>الحالة</th>
-                                <th>الإجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="contractsTableBody">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Payments Page -->
-            <div id="payments" class="page">
-                <div class="page-header">
-                    <h1><i class="fas fa-credit-card"></i> إدارة الدفعات</h1>
-                    <button class="btn btn-primary" onclick="app.showAddPaymentModal()">
-                        <i class="fas fa-plus"></i>
-                        <span>تسجيل دفعة جديدة</span>
-                    </button>
-                </div>
-
-                <div id="paymentsGrid" class="payments-grid">
-                </div>
-            </div>
-
-            <!-- Maintenance Page -->
-            <div id="maintenance" class="page">
-                <div class="page-header">
-                    <h1><i class="fas fa-tools"></i> إدارة الصيانة</h1>
-                    <button class="btn btn-primary" onclick="app.showAddMaintenanceModal()">
-                        <i class="fas fa-plus"></i>
-                        <span>إضافة طلب صيانة</span>
-                    </button>
-                </div>
-
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>التاريخ</th>
-                                <th>رقم الوحدة</th>
-                                <th>النوع</th>
-                                <th>الوصف</th>
-                                <th>التكلفة</th>
-                                <th>الحالة</th>
-                                <th>الإجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="maintenanceTableBody">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Reports Page -->
-            <div id="reports" class="page">
-                <div class="page-header">
-                    <h1><i class="fas fa-chart-line"></i> التقارير والتحليلات</h1>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3>إجمالي الإيرادات</h3>
-                        <div class="value" id="totalRevenue">0</div>
-                        <i class="fas fa-money-bill-wave icon"></i>
-                    </div>
-                    <div class="stat-card" style="background: linear-gradient(135deg, #f56565 0%, #c53030 100%);">
-                        <h3>مصاريف الصيانة</h3>
-                        <div class="value" id="maintenanceCosts">0</div>
-                        <i class="fas fa-tools icon"></i>
-                    </div>
-                    <div class="stat-card" style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);">
-                        <h3>صافي الربح</h3>
-                        <div class="value" id="netProfit">0</div>
-                        <i class="fas fa-chart-line icon"></i>
-                    </div>
-                    <div class="stat-card" style="background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);">
-                        <h3>معدل الإشغال</h3>
-                        <div class="value" id="occupancyRate">0%</div>
-                        <i class="fas fa-percentage icon"></i>
+                    <div class="user-info">
+                        <span>مرحباً، المدير</span>
+                        <i class="fas fa-user-circle"></i>
                     </div>
                 </div>
-
-                <div class="table-container">
-                    <div style="padding: 25px; border-bottom: 1px solid var(--border-color);">
-                        <h2 style="font-size: 20px; color: var(--text-primary);">
-                            <i class="fas fa-lightbulb" style="color: var(--warning-color); margin-left: 10px;"></i>
-                            المستشار المالي الذكي
-                        </h2>
-                    </div>
-                    <div id="financialAdvisor" style="padding: 25px;">
-                        <div class="empty-state">
-                            <i class="fas fa-robot"></i>
-                            <h3>جاري تحليل البيانات المالية...</h3>
-                            <p>سيتم عرض التوصيات والنصائح المالية هنا</p>
-                        </div>
-                    </div>
+                <div class="header-right">
+                    <h1 id="pageTitle">لوحة التحكم</h1>
                 </div>
-            </div>
+            </header>
 
-            <!-- Settings Page -->
-            <div id="settings" class="page">
-                <div class="page-header">
-                    <h1><i class="fas fa-cog"></i> الإعدادات</h1>
-                </div>
-
-                <div class="table-container">
-                    <div style="padding: 40px;">
-                        <h2 style="margin-bottom: 30px; color: var(--text-primary);">إعدادات النظام</h2>
-                        
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>اسم المبنى</label>
-                                <input type="text" id="buildingName" value="مبنى سكني" placeholder="أدخل اسم المبنى">
+            <!-- Content Area -->
+            <div class="content-area" id="contentArea">
+                <!-- Dashboard Content (Default) -->
+                <div id="dashboardContent" class="page-content active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-home"></i>
                             </div>
-                            <div class="form-group">
-                                <label>العملة</label>
-                                <select id="currency">
-                                    <option value="SAR">ريال سعودي (SAR)</option>
-                                    <option value="AED">درهم إماراتي (AED)</option>
-                                    <option value="EGP">جنيه مصري (EGP)</option>
-                                    <option value="USD">دولار أمريكي (USD)</option>
-                                </select>
+                            <div class="stat-info">
+                                <h3 id="totalUnits">0</h3>
+                                <p>إجمالي الشقق</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalResidents">0</h3>
+                                <p>إجمالي السكان</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-file-contract"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="activeContracts">0</h3>
+                                <p>العقود النشطة</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="monthlyRevenue">0</h3>
+                                <p>الإيرادات الشهرية</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>التنبيهات</h3>
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <div class="card-content">
+                                <div id="alertsList" class="alerts-list">
+                                    <p class="no-data">لا توجد تنبيهات حالياً</p>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label>كلمة المرور الجديدة</label>
-                            <input type="password" id="newPassword" placeholder="اتركه فارغاً للإبقاء على كلمة المرور الحالية">
-                        </div>
-
-                        <div class="form-group">
-                            <label>شعار المبنى</label>
-                            <input type="file" id="buildingLogo" accept="image/*">
-                            <div id="logoPreview" style="margin-top: 15px;"></div>
-                        </div>
-
-                        <div style="display: flex; gap: 15px; margin-top: 30px;">
-                            <button class="btn btn-primary" onclick="app.saveSettings()">
-                                <i class="fas fa-save"></i>
-                                <span>حفظ الإعدادات</span>
-                            </button>
-                            <button class="btn btn-danger" onclick="app.resetData()">
-                                <i class="fas fa-trash-restore"></i>
-                                <span>إعادة تعيين البيانات</span>
-                            </button>
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>المدفوعات المتأخرة</h3>
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="card-content">
+                                <div id="overduePayments" class="payments-list">
+                                    <p class="no-data">لا توجد مدفوعات متأخرة</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Other page contents will be loaded dynamically -->
+                <div id="unitsContent" class="page-content"></div>
+                <div id="residentsContent" class="page-content"></div>
+                <div id="contractsContent" class="page-content"></div>
+                <div id="paymentsContent" class="page-content"></div>
+                <div id="maintenanceContent" class="page-content"></div>
+                <div id="inventoryContent" class="page-content"></div>
+                <div id="reportsContent" class="page-content"></div>
+                <div id="settingsContent" class="page-content"></div>
             </div>
         </main>
     </div>
 
-    <!-- Modal -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle">عنوان</h2>
-                <button class="close-btn" onclick="app.closeModal()">&times;</button>
-            </div>
-            <div id="modalBody"></div>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>جاري التحميل...</p>
         </div>
     </div>
 
-    <script>
-        // ========== قاعدة البيانات ==========
-        class Database {
-            constructor() {
-                this.storageKey = 'buildingManagementSystem_v2';
-                this.init();
-            }
-
-            init() {
-                if (!localStorage.getItem(this.storageKey)) {
-                    const defaultData = {
-                        settings: {
-                            password: btoa('123' + '_salt_key'),
-                            buildingName: 'مبنى سكني',
-                            currency: 'SAR',
-                            logo: null
-                        },
-                        units: [],
-                        residents: [],
-                        contracts: [],
-                        payments: [],
-                        maintenance: []
-                    };
-                    this.saveData(defaultData);
-                }
-            }
-
-            getData() {
-                try {
-                    return JSON.parse(localStorage.getItem(this.storageKey)) || {};
-                } catch {
-                    return {};
-                }
-            }
-
-            saveData(data) {
-                localStorage.setItem(this.storageKey, JSON.stringify(data));
-            }
-
-            getTable(tableName) {
-                const data = this.getData();
-                return data[tableName] || [];
-            }
-
-            saveTable(tableName, tableData) {
-                const data = this.getData();
-                data[tableName] = tableData;
-                this.saveData(data);
-            }
-
-            addRecord(tableName, record) {
-                const table = this.getTable(tableName);
-                record.id = Date.now().toString() + Math.random().toString(36).substr(2, 9);
-                record.createdAt = new Date().toISOString();
-                table.push(record);
-                this.saveTable(tableName, table);
-                return record;
-            }
-
-            updateRecord(tableName, id, updates) {
-                const table = this.getTable(tableName);
-                const index = table.findIndex(r => r.id === id);
-                if (index !== -1) {
-                    table[index] = { ...table[index], ...updates, updatedAt: new Date().toISOString() };
-                    this.saveTable(tableName, table);
-                    return true;
-                }
-                return false;
-            }
-
-            deleteRecord(tableName, id) {
-                const table = this.getTable(tableName);
-                const filtered = table.filter(r => r.id !== id);
-                this.saveTable(tableName, filtered);
-                return true;
-            }
-
-            verifyPassword(password) {
-                const data = this.getData();
-                const encrypted = btoa(password + '_salt_key');
-                return encrypted === data.settings.password;
-            }
-
-            changePassword(newPassword) {
-                const data = this.getData();
-                data.settings.password = btoa(newPassword + '_salt_key');
-                this.saveData(data);
-            }
-
-            getSettings() {
-                const data = this.getData();
-                return data.settings || {};
-            }
-
-            updateSettings(settings) {
-                const data = this.getData();
-                data.settings = { ...data.settings, ...settings };
-                this.saveData(data);
-            }
-
-            reset() {
-                localStorage.removeItem(this.storageKey);
-                this.init();
-            }
-        }
-
-        // ========== التطبيق الرئيسي ==========
-        class App {
-            constructor() {
-                this.db = new Database();
-                this.currentPage = 'dashboard';
-                this.init();
-            }
-
-            init() {
-                this.bindEvents();
-                this.checkLogin();
-            }
-
-            bindEvents() {
-                // Login form
-                document.getElementById('loginForm').addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    this.login();
-                });
-
-                // Navigation
-                document.querySelectorAll('.nav-link').forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const page = link.dataset.page;
-                        this.switchPage(page);
-                    });
-                });
-            }
-
-            checkLogin() {
-                const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-                if (isLoggedIn === 'true') {
-                    this.showMainApp();
-                }
-            }
-
-            login() {
-                const password = document.getElementById('password').value;
-                if (this.db.verifyPassword(password)) {
-                    sessionStorage.setItem('isLoggedIn', 'true');
-                    this.showMainApp();
-                    this.showNotification('تم تسجيل الدخول بنجاح', 'success');
-                } else {
-                    this.showNotification('كلمة المرور غير صحيحة', 'error');
-                    document.getElementById('password').value = '';
-                }
-            }
-
-            logout() {
-                if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
-                    sessionStorage.removeItem('isLoggedIn');
-                    document.getElementById('loginScreen').style.display = 'flex';
-                    document.getElementById('mainApp').classList.remove('active');
-                    this.showNotification('تم تسجيل الخروج بنجاح', 'success');
-                }
-            }
-
-            showMainApp() {
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('mainApp').classList.add('active');
-                this.loadAllData();
-            }
-
-            switchPage(pageName) {
-                // Update navigation
-                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-                document.querySelector(`[data-page="${pageName}"]`).parentElement.classList.add('active');
-
-                // Update content
-                document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-                document.getElementById(pageName).classList.add('active');
-
-                this.currentPage = pageName;
-                this.loadPageData(pageName);
-            }
-
-            loadAllData() {
-                this.loadDashboard();
-                this.loadUnits();
-                this.loadResidents();
-                this.loadContracts();
-                this.loadPayments();
-                this.loadMaintenance();
-                this.loadReports();
-            }
-
-            loadPageData(pageName) {
-                switch(pageName) {
-                    case 'dashboard':
-                        this.loadDashboard();
-                        break;
-                    case 'units':
-                        this.loadUnits();
-                        break;
-                    case 'residents':
-                        this.loadResidents();
-                        break;
-                    case 'contracts':
-                        this.loadContracts();
-                        break;
-                    case 'payments':
-                        this.loadPayments();
-                        break;
-                    case 'maintenance':
-                        this.loadMaintenance();
-                        break;
-                    case 'reports':
-                        this.loadReports();
-                        break;
-                }
-            }
-
-            loadDashboard() {
-                const units = this.db.getTable('units');
-                const residents = this.db.getTable('residents');
-                const payments = this.db.getTable('payments');
-
-                document.getElementById('totalUnits').textContent = units.length;
-                document.getElementById('rentedUnits').textContent = units.filter(u => u.status === 'مؤجرة').length;
-                document.getElementById('totalResidents').textContent = residents.length;
-
-                const currentMonth = new Date().getMonth();
-                const currentYear = new Date().getFullYear();
-                const monthlyRevenue = payments
-                    .filter(p => {
-                        const date = new Date(p.date);
-                        return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
-                    })
-                    .reduce((sum, p) => sum + parseFloat(p.amount || 0), 0);
-                
-                document.getElementById('monthlyRevenue').textContent = monthlyRevenue.toLocaleString('ar-SA');
-            }
-
-            loadUnits() {
-                const units = this.db.getTable('units');
-                const tbody = document.getElementById('unitsTableBody');
-                
-                if (units.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);">لا توجد وحدات مسجلة</td></tr>';
-                    return;
-                }
-
-                tbody.innerHTML = units.map(unit => `
-                    <tr>
-                        <td><strong>${unit.number}</strong></td>
-                        <td>${unit.type}</td>
-                        <td>${unit.area} م²</td>
-                        <td>${parseFloat(unit.rent).toLocaleString('ar-SA')} ريال</td>
-                        <td><span class="badge ${unit.status === 'مؤجرة' ? 'badge-success' : 'badge-warning'}">${unit.status}</span></td>
-                        <td>
-                            <button class="action-btn btn-edit" onclick="app.editUnit('${unit.id}')">
-                                <i class="fas fa-edit"></i> تعديل
-                            </button>
-                            <button class="action-btn btn-delete" onclick="app.deleteUnit('${unit.id}')">
-                                <i class="fas fa-trash"></i> حذف
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-            }
-
-            loadResidents() {
-                const residents = this.db.getTable('residents');
-                const tbody = document.getElementById('residentsTableBody');
-                
-                if (residents.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: var(--text-muted);">لا يوجد مقيمون مسجلون</td></tr>';
-                    return;
-                }
-
-                tbody.innerHTML = residents.map(resident => `
-                    <tr>
-                        <td><strong>${resident.name}</strong></td>
-                        <td>${resident.phone}</td>
-                        <td>${resident.email || '-'}</td>
-                        <td>${resident.unitNumber}</td>
-                        <td>
-                            <button class="action-btn btn-edit" onclick="app.editResident('${resident.id}')">
-                                <i class="fas fa-edit"></i> تعديل
-                            </button>
-                            <button class="action-btn btn-delete" onclick="app.deleteResident('${resident.id}')">
-                                <i class="fas fa-trash"></i> حذف
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-            }
-
-            loadContracts() {
-                const contracts = this.db.getTable('contracts');
-                const tbody = document.getElementById('contractsTableBody');
-                
-                if (contracts.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px; color: var(--text-muted);">لا توجد عقود مسجلة</td></tr>';
-                    return;
-                }
-
-                tbody.innerHTML = contracts.map(contract => `
-                    <tr>
-                        <td><strong>${contract.contractNumber}</strong></td>
-                        <td>${contract.tenantName}</td>
-                        <td>${contract.unitNumber}</td>
-                        <td>${contract.startDate}</td>
-                        <td>${contract.endDate}</td>
-                        <td>${parseFloat(contract.monthlyRent).toLocaleString('ar-SA')} ريال</td>
-                        <td><span class="badge ${contract.status === 'نشط' ? 'badge-success' : 'badge-danger'}">${contract.status}</span></td>
-                        <td>
-                            <button class="action-btn btn-view" onclick="app.viewContract('${contract.id}')">
-                                <i class="fas fa-eye"></i> عرض
-                            </button>
-                            <button class="action-btn btn-delete" onclick="app.deleteContract('${contract.id}')">
-                                <i class="fas fa-trash"></i> حذف
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-            }
-
-            loadPayments() {
-                const payments = this.db.getTable('payments');
-                const grid = document.getElementById('paymentsGrid');
-                
-                if (payments.length === 0) {
-                    grid.innerHTML = '<div class="empty-state"><i class="fas fa-receipt"></i><h3>لا توجد دفعات مسجلة</h3></div>';
-                    return;
-                }
-
-                grid.innerHTML = payments.map(payment => `
-                    <div class="payment-card">
-                        <div class="payment-card-header">
-                            <div class="payment-amount">${parseFloat(payment.amount).toLocaleString('ar-SA')} <small style="font-size: 16px;">ريال</small></div>
-                            <div class="payment-icon">
-                                <i class="fas fa-money-bill-wave"></i>
-                            </div>
-                        </div>
-                        <div class="payment-info">
-                            <h4>${payment.residentName}</h4>
-                            <p style="color: var(--text-muted); margin-bottom: 5px;">
-                                <i class="fas fa-home" style="margin-left: 5px;"></i>
-                                وحدة رقم ${payment.unitNumber}
-                            </p>
-                            <p style="color: var(--text-muted); font-size: 14px;">
-                                <i class="fas fa-calendar" style="margin-left: 5px;"></i>
-                                ${payment.date}
-                            </p>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span class="payment-status status-paid">
-                                <i class="fas fa-check-circle" style="margin-left: 5px;"></i>
-                                ${payment.type}
-                            </span>
-                            <div>
-                                <button class="action-btn btn-view" onclick="app.viewPayment('${payment.id}')">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button class="action-btn btn-delete" onclick="app.deletePayment('${payment.id}')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            }
-
-            loadMaintenance() {
-                const maintenance = this.db.getTable('maintenance');
-                const tbody = document.getElementById('maintenanceTableBody');
-                
-                if (maintenance.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);">لا توجد طلبات صيانة</td></tr>';
-                    return;
-                }
-
-                tbody.innerHTML = maintenance.map(item => `
-                    <tr>
-                        <td>${item.date}</td>
-                        <td>${item.unitNumber}</td>
-                        <td>${item.type}</td>
-                        <td>${item.description}</td>
-                        <td>${item.cost ? parseFloat(item.cost).toLocaleString('ar-SA') + ' ريال' : '-'}</td>
-                        <td><span class="badge ${item.status === 'مكتمل' ? 'badge-success' : item.status === 'قيد التنفيذ' ? 'badge-info' : 'badge-warning'}">${item.status}</span></td>
-                        <td>
-                            <button class="action-btn btn-edit" onclick="app.editMaintenance('${item.id}')">
-                                <i class="fas fa-edit"></i> تعديل
-                            </button>
-                            <button class="action-btn btn-delete" onclick="app.deleteMaintenance('${item.id}')">
-                                <i class="fas fa-trash"></i> حذف
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-            }
-
-            loadReports() {
-                const payments = this.db.getTable('payments');
-                const maintenance = this.db.getTable('maintenance');
-                const units = this.db.getTable('units');
-
-                const totalRevenue = payments.reduce((sum, p) => sum + parseFloat(p.amount || 0), 0);
-                const maintenanceCosts = maintenance
-                    .filter(m => m.cost)
-                    .reduce((sum, m) => sum + parseFloat(m.cost || 0), 0);
-                const netProfit = totalRevenue - maintenanceCosts;
-                const occupancyRate = units.length > 0 
-                    ? ((units.filter(u => u.status === 'مؤجرة').length / units.length) * 100).toFixed(1)
-                    : 0;
-
-                document.getElementById('totalRevenue').textContent = totalRevenue.toLocaleString('ar-SA');
-                document.getElementById('maintenanceCosts').textContent = maintenanceCosts.toLocaleString('ar-SA');
-                document.getElementById('netProfit').textContent = netProfit.toLocaleString('ar-SA');
-                document.getElementById('occupancyRate').textContent = occupancyRate + '%';
-
-                // Financial Advisor
-                this.generateFinancialAdvice(totalRevenue, maintenanceCosts, occupancyRate);
-            }
-
-            generateFinancialAdvice(revenue, costs, occupancy) {
-                const advisor = document.getElementById('financialAdvisor');
-                let advice = [];
-
-                if (occupancy < 70) {
-                    advice.push({
-                        icon: 'fas fa-exclamation-triangle',
-                        color: 'var(--warning-color)',
-                        title: 'معدل إشغال منخفض',
-                        text: `معدل الإشغال الحالي ${occupancy}% أقل من المعدل المثالي. ننصح بمراجعة أسعار الإيجار أو تحسين التسويق.`
-                    });
-                }
-
-                if (costs > revenue * 0.3) {
-                    advice.push({
-                        icon: 'fas fa-chart-line',
-                        color: 'var(--error-color)',
-                        title: 'مصاريف صيانة مرتفعة',
-                        text: `مصاريف الصيانة تشكل ${((costs/revenue)*100).toFixed(1)}% من الإيرادات. ننصح بمراجعة عقود الصيانة والبحث عن بدائل أكثر كفاءة.`
-                    });
-                }
-
-                if (revenue > 0 && costs < revenue * 0.2) {
-                    advice.push({
-                        icon: 'fas fa-thumbs-up',
-                        color: 'var(--success-color)',
-                        title: 'أداء مالي ممتاز',
-                        text: 'نسبة المصاريف إلى الإيرادات جيدة جداً. استمر في الحفاظ على هذا المستوى من الكفاءة.'
-                    });
-                }
-
-                if (advice.length === 0) {
-                    advice.push({
-                        icon: 'fas fa-info-circle',
-                        color: 'var(--info-color)',
-                        title: 'لا توجد توصيات حالياً',
-                        text: 'الأداء المالي ضمن المعدلات الطبيعية. سنقوم بإعلامك عند وجود أي توصيات.'
-                    });
-                }
-
-                advisor.innerHTML = advice.map(item => `
-                    <div style="padding: 20px; background: var(--bg-primary); border-radius: 12px; margin-bottom: 15px; border-right: 4px solid ${item.color};">
-                        <div style="display: flex; align-items: flex-start; gap: 15px;">
-                            <i class="${item.icon}" style="font-size: 32px; color: ${item.color};"></i>
-                            <div style="flex: 1;">
-                                <h3 style="font-size: 18px; margin-bottom: 8px; color: var(--text-primary);">${item.title}</h3>
-                                <p style="color: var(--text-secondary); line-height: 1.6;">${item.text}</p>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            }
-
-            // Modal functions
-            showAddUnitModal() {
-                document.getElementById('modalTitle').textContent = 'إضافة وحدة جديدة';
-                document.getElementById('modalBody').innerHTML = `
-                    <form id="unitForm" onsubmit="app.saveUnit(event)">
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>رقم الوحدة *</label>
-                                <input type="text" id="unitNumber" required>
-                            </div>
-                            <div class="form-group">
-                                <label>النوع *</label>
-                                <select id="unitType" required>
-                                    <option value="">اختر النوع</option>
-                                    <option value="شقة">شقة</option>
-                                    <option value="فيلا">فيلا</option>
-                                    <option value="محل تجاري">محل تجاري</option>
-                                    <option value="مكتب">مكتب</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>المساحة (م²) *</label>
-                                <input type="number" id="unitArea" required min="1">
-                            </div>
-                            <div class="form-group">
-                                <label>الإيجار الشهري (ريال) *</label>
-                                <input type="number" id="unitRent" required min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>الحالة *</label>
-                            <select id="unitStatus" required>
-                                <option value="شاغرة">شاغرة</option>
-                                <option value="مؤجرة">مؤجرة</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
-                            <i class="fas fa-save"></i>
-                            <span>حفظ الوحدة</span>
-                        </button>
-                    </form>
-                `;
-                this.showModal();
-            }
-
-            saveUnit(event) {
-                event.preventDefault();
-                const unit = {
-                    number: document.getElementById('unitNumber').value,
-                    type: document.getElementById('unitType').value,
-                    area: document.getElementById('unitArea').value,
-                    rent: document.getElementById('unitRent').value,
-                    status: document.getElementById('unitStatus').value
-                };
-                this.db.addRecord('units', unit);
-                this.closeModal();
-                this.loadUnits();
-                this.loadDashboard();
-                this.showNotification('تم إضافة الوحدة بنجاح', 'success');
-            }
-
-            deleteUnit(id) {
-                if (confirm('هل أنت متأكد من حذف هذه الوحدة؟')) {
-                    this.db.deleteRecord('units', id);
-                    this.loadUnits();
-                    this.loadDashboard();
-                    this.showNotification('تم حذف الوحدة بنجاح', 'success');
-                }
-            }
-
-            showAddResidentModal() {
-                document.getElementById('modalTitle').textContent = 'إضافة مقيم جديد';
-                document.getElementById('modalBody').innerHTML = `
-                    <form id="residentForm" onsubmit="app.saveResident(event)">
-                        <div class="form-group">
-                            <label>الاسم الكامل *</label>
-                            <input type="text" id="residentName" required>
-                        </div>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>رقم الهاتف *</label>
-                                <input type="tel" id="residentPhone" required>
-                            </div>
-                            <div class="form-group">
-                                <label>البريد الإلكتروني</label>
-                                <input type="email" id="residentEmail">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>رقم الوحدة *</label>
-                            <input type="text" id="residentUnit" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
-                            <i class="fas fa-save"></i>
-                            <span>حفظ المقيم</span>
-                        </button>
-                    </form>
-                `;
-                this.showModal();
-            }
-
-            saveResident(event) {
-                event.preventDefault();
-                const resident = {
-                    name: document.getElementById('residentName').value,
-                    phone: document.getElementById('residentPhone').value,
-                    email: document.getElementById('residentEmail').value,
-                    unitNumber: document.getElementById('residentUnit').value
-                };
-                this.db.addRecord('residents', resident);
-                this.closeModal();
-                this.loadResidents();
-                this.loadDashboard();
-                this.showNotification('تم إضافة المقيم بنجاح', 'success');
-            }
-
-            deleteResident(id) {
-                if (confirm('هل أنت متأكد من حذف هذا المقيم؟')) {
-                    this.db.deleteRecord('residents', id);
-                    this.loadResidents();
-                    this.loadDashboard();
-                    this.showNotification('تم حذف المقيم بنجاح', 'success');
-                }
-            }
-
-            showAddContractModal() {
-                document.getElementById('modalTitle').textContent = 'إضافة عقد جديد';
-                document.getElementById('modalBody').innerHTML = `
-                    <form id="contractForm" onsubmit="app.saveContract(event)">
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>رقم العقد *</label>
-                                <input type="text" id="contractNumber" required>
-                            </div>
-                            <div class="form-group">
-                                <label>اسم المستأجر *</label>
-                                <input type="text" id="tenantName" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>رقم الوحدة *</label>
-                            <input type="text" id="contractUnit" required>
-                        </div>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>تاريخ البداية *</label>
-                                <input type="date" id="startDate" required>
-                            </div>
-                            <div class="form-group">
-                                <label>تاريخ الانتهاء *</label>
-                                <input type="date" id="endDate" required>
-                            </div>
-                        </div>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>القيمة الشهرية (ريال) *</label>
-                                <input type="number" id="monthlyRent" required min="0">
-                            </div>
-                            <div class="form-group">
-                                <label>الحالة *</label>
-                                <select id="contractStatus" required>
-                                    <option value="نشط">نشط</option>
-                                    <option value="منتهي">منتهي</option>
-                                    <option value="ملغي">ملغي</option>
-                                </select>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
-                            <i class="fas fa-save"></i>
-                            <span>حفظ العقد</span>
-                        </button>
-                    </form>
-                `;
-                this.showModal();
-            }
-
-            saveContract(event) {
-                event.preventDefault();
-                const contract = {
-                    contractNumber: document.getElementById('contractNumber').value,
-                    tenantName: document.getElementById('tenantName').value,
-                    unitNumber: document.getElementById('contractUnit').value,
-                    startDate: document.getElementById('startDate').value,
-                    endDate: document.getElementById('endDate').value,
-                    monthlyRent: document.getElementById('monthlyRent').value,
-                    status: document.getElementById('contractStatus').value
-                };
-                this.db.addRecord('contracts', contract);
-                this.closeModal();
-                this.loadContracts();
-                this.showNotification('تم إضافة العقد بنجاح', 'success');
-            }
-
-            deleteContract(id) {
-                if (confirm('هل أنت متأكد من حذف هذا العقد؟')) {
-                    this.db.deleteRecord('contracts', id);
-                    this.loadContracts();
-                    this.showNotification('تم حذف العقد بنجاح', 'success');
-                }
-            }
-
-            showAddPaymentModal() {
-                document.getElementById('modalTitle').textContent = 'تسجيل دفعة جديدة';
-                document.getElementById('modalBody').innerHTML = `
-                    <form id="paymentForm" onsubmit="app.savePayment(event)">
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>التاريخ *</label>
-                                <input type="date" id="paymentDate" value="${new Date().toISOString().split('T')[0]}" required>
-                            </div>
-                            <div class="form-group">
-                                <label>المبلغ (ريال) *</label>
-                                <input type="number" id="paymentAmount" required min="0">
-                            </div>
-                        </div>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>اسم المقيم *</label>
-                                <input type="text" id="paymentResident" required>
-                            </div>
-                            <div class="form-group">
-                                <label>رقم الوحدة *</label>
-                                <input type="text" id="paymentUnit" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>نوع الدفعة *</label>
-                            <select id="paymentType" required>
-                                <option value="إيجار">إيجار</option>
-                                <option value="كهرباء">كهرباء</option>
-                                <option value="ماء">ماء</option>
-                                <option value="صيانة">صيانة</option>
-                                <option value="أخرى">أخرى</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
-                            <i class="fas fa-save"></i>
-                            <span>حفظ الدفعة</span>
-                        </button>
-                    </form>
-                `;
-                this.showModal();
-            }
-
-            savePayment(event) {
-                event.preventDefault();
-                const payment = {
-                    date: document.getElementById('paymentDate').value,
-                    amount: document.getElementById('paymentAmount').value,
-                    residentName: document.getElementById('paymentResident').value,
-                    unitNumber: document.getElementById('paymentUnit').value,
-                    type: document.getElementById('paymentType').value
-                };
-                this.db.addRecord('payments', payment);
-                this.closeModal();
-                this.loadPayments();
-                this.loadDashboard();
-                this.loadReports();
-                this.showNotification('تم تسجيل الدفعة بنجاح', 'success');
-            }
-
-            deletePayment(id) {
-                if (confirm('هل أنت متأكد من حذف هذه الدفعة؟')) {
-                    this.db.deleteRecord('payments', id);
-                    this.loadPayments();
-                    this.loadDashboard();
-                    this.loadReports();
-                    this.showNotification('تم حذف الدفعة بنجاح', 'success');
-                }
-            }
-
-            showAddMaintenanceModal() {
-                document.getElementById('modalTitle').textContent = 'إضافة طلب صيانة';
-                document.getElementById('modalBody').innerHTML = `
-                    <form id="maintenanceForm" onsubmit="app.saveMaintenance(event)">
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>التاريخ *</label>
-                                <input type="date" id="maintenanceDate" value="${new Date().toISOString().split('T')[0]}" required>
-                            </div>
-                            <div class="form-group">
-                                <label>رقم الوحدة *</label>
-                                <input type="text" id="maintenanceUnit" required>
-                            </div>
-                        </div>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>نوع الصيانة *</label>
-                                <select id="maintenanceType" required>
-                                    <option value="">اختر النوع</option>
-                                    <option value="كهرباء">كهرباء</option>
-                                    <option value="سباكة">سباكة</option>
-                                    <option value="تكييف">تكييف</option>
-                                    <option value="نجارة">نجارة</option>
-                                    <option value="دهانات">دهانات</option>
-                                    <option value="أخرى">أخرى</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>التكلفة (ريال)</label>
-                                <input type="number" id="maintenanceCost" min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>الوصف *</label>
-                            <textarea id="maintenanceDescription" rows="3" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>الحالة *</label>
-                            <select id="maintenanceStatus" required>
-                                <option value="قيد الانتظار">قيد الانتظار</option>
-                                <option value="قيد التنفيذ">قيد التنفيذ</option>
-                                <option value="مكتمل">مكتمل</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
-                            <i class="fas fa-save"></i>
-                            <span>حفظ طلب الصيانة</span>
-                        </button>
-                    </form>
-                `;
-                this.showModal();
-            }
-
-            saveMaintenance(event) {
-                event.preventDefault();
-                const maintenance = {
-                    date: document.getElementById('maintenanceDate').value,
-                    unitNumber: document.getElementById('maintenanceUnit').value,
-                    type: document.getElementById('maintenanceType').value,
-                    cost: document.getElementById('maintenanceCost').value,
-                    description: document.getElementById('maintenanceDescription').value,
-                    status: document.getElementById('maintenanceStatus').value
-                };
-                this.db.addRecord('maintenance', maintenance);
-                this.closeModal();
-                this.loadMaintenance();
-                this.loadReports();
-                this.showNotification('تم إضافة طلب الصيانة بنجاح', 'success');
-            }
-
-            deleteMaintenance(id) {
-                if (confirm('هل أنت متأكد من حذف طلب الصيانة؟')) {
-                    this.db.deleteRecord('maintenance', id);
-                    this.loadMaintenance();
-                    this.loadReports();
-                    this.showNotification('تم حذف طلب الصيانة بنجاح', 'success');
-                }
-            }
-
-            saveSettings() {
-                const buildingName = document.getElementById('buildingName').value;
-                const currency = document.getElementById('currency').value;
-                const newPassword = document.getElementById('newPassword').value;
-
-                this.db.updateSettings({ buildingName, currency });
-
-                if (newPassword) {
-                    this.db.changePassword(newPassword);
-                    this.showNotification('تم تغيير كلمة المرور بنجاح', 'success');
-                    document.getElementById('newPassword').value = '';
-                } else {
-                    this.showNotification('تم حفظ الإعدادات بنجاح', 'success');
-                }
-            }
-
-            resetData() {
-                if (confirm('هل أنت متأكد من إعادة تعيين جميع البيانات؟ سيتم حذف كل شيء ولا يمكن التراجع عن هذا الإجراء!')) {
-                    if (confirm('تأكيد نهائي: سيتم حذف جميع الوحدات، المقيمون، العقود، الدفعات، وطلبات الصيانة. هل تريد المتابعة؟')) {
-                        this.db.reset();
-                        this.loadAllData();
-                        this.showNotification('تم إعادة تعيين البيانات بنجاح', 'success');
-                    }
-                }
-            }
-
-            showModal() {
-                document.getElementById('modal').classList.add('show');
-            }
-
-            closeModal() {
-                document.getElementById('modal').classList.remove('show');
-            }
-
-            showNotification(message, type) {
-                const notification = document.getElementById('notification');
-                notification.textContent = message;
-                notification.className = `notification ${type} show`;
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                }, 3000);
-            }
-
-            // Placeholder methods for edit/view functions
-            editUnit(id) { this.showNotification('ميزة التعديل قيد التطوير', 'info'); }
-            editResident(id) { this.showNotification('ميزة التعديل قيد التطوير', 'info'); }
-            viewContract(id) { this.showNotification('ميزة العرض قيد التطوير', 'info'); }
-            viewPayment(id) { this.showNotification('ميزة العرض قيد التطوير', 'info'); }
-            editMaintenance(id) { this.showNotification('ميزة التعديل قيد التطوير', 'info'); }
-        }
-
-        // Initialize App
-        const app = new App();
-    </script>
+    <!-- Modal Container -->
+    <div id="modalContainer" class="modal-container"></div>
+
+    <!-- Scripts -->
+    <script src="database.js"></script>
+    <script src="main.js"></script>
+    <script src="app.js"></script>
+    <script src="dashboard.js"></script>
+    <script src="units.js"></script>
+    <script src="residents.js"></script>
+    <script src="contracts.js"></script>
+    <script src="payments.js"></script>
+    <script src="maintenance.js"></script>
+    <script src="inventory.js"></script>
+    <script src="reports.js"></script>
+    <script src="advanced-features.js"></script>
 </body>
 </html>
-

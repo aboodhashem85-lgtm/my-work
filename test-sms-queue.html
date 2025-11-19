@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <title>Test SMS Queue</title>
+  <style>body{font-family:Arial,Helvetica,sans-serif;padding:20px}</style>
+</head>
+<body>
+  <h2>اختبار طابور الرسائل SMS</h2>
+  <button id="queueBtn">أضف رسالة إلى الطابور</button>
+  <button id="processBtn">معالجة الطابور</button>
+  <pre id="log"></pre>
+
+  <script>
+    // Simple in-page AdvancedFeatures-like stub to test queue behavior
+    const smsQueue = [];
+    const smsLog = [];
+
+    function queueSms(to, body, trigger){
+      smsQueue.push({to, body, trigger, ts: new Date().toISOString()});
+      render();
+    }
+
+    async function sendSmsSim(to, body){
+      // simulate network delay
+      await new Promise(r => setTimeout(r, 300));
+      const sid = 'SM' + Math.random().toString(36).slice(2,10);
+      smsLog.push({to, body, status: 'sent', sid, ts: new Date().toISOString()});
+      render();
+      return {success:true, sid};
+    }
+
+    async function processSMSQueue(){
+      if (smsQueue.length === 0) return;
+      const q = smsQueue.splice(0);
+      for (const sms of q){
+        await sendSmsSim(sms.to, sms.body);
+      }
+    }
+
+    function render(){
+      const log = document.getElementById('log');
+      log.textContent = 'Queue:\n' + JSON.stringify(smsQueue, null, 2) + '\n\nLog:\n' + JSON.stringify(smsLog, null, 2);
+    }
+
+    document.getElementById('queueBtn').addEventListener('click', ()=>{
+      queueSms('+9665' + Math.floor(Math.random()*10000000), 'رسالة اختبار', 'manual');
+    });
+
+    document.getElementById('processBtn').addEventListener('click', ()=>{
+      processSMSQueue();
+    });
+
+    render();
+  </script>
+</body>
+</html>

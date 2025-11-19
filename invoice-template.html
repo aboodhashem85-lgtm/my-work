@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فاتورة إيجار</title>
+    <style>
+        /* الخطوط */
+        @font-face {
+            font-family: 'Cairo';
+            src: url('fonts/Cairo-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Cairo';
+            src: url('fonts/Cairo-Bold.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        /* الأنماط الأساسية */
+        body {
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        .invoice-container {
+            width: 210mm; /* A4 width */
+            min-height: 297mm; /* A4 height */
+            margin: 0 auto;
+            padding: 20mm;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* رأس الفاتورة */
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .header-logo {
+            flex-basis: 30%;
+            text-align: right;
+        }
+
+        .header-logo img {
+            max-width: 150px;
+            max-height: 100px;
+            object-fit: contain;
+        }
+
+        .header-info {
+            flex-basis: 65%;
+            text-align: right;
+        }
+
+        .header-info h1 {
+            color: #4CAF50; /* لون أخضر مميز */
+            font-size: 28px;
+            margin: 0 0 5px 0;
+            font-weight: bold;
+        }
+
+        .header-info p {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* تفاصيل الفاتورة */
+        .invoice-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .details-box {
+            width: 48%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .details-box h3 {
+            font-size: 16px;
+            color: #555;
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        .details-box p {
+            margin: 0 0 8px 0;
+            font-size: 13px;
+        }
+
+        .details-box .label {
+            font-weight: bold;
+            color: #333;
+            display: inline-block;
+            width: 100px; /* لتنظيم المحاذاة */
+        }
+
+        /* جدول الأصناف */
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .invoice-table th, .invoice-table td {
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            text-align: right;
+            font-size: 14px;
+        }
+
+        .invoice-table th {
+            background-color: #4CAF50;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .invoice-table tr:nth-child(even) {
+            background-color: #f4f4f4;
+        }
+
+        /* الإجمالي */
+        .invoice-totals {
+            width: 300px;
+            margin-right: 0;
+            margin-left: auto; /* محاذاة لليسار في RTL */
+        }
+
+        .invoice-totals table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .invoice-totals th, .invoice-totals td {
+            padding: 8px 15px;
+            font-size: 15px;
+        }
+
+        .invoice-totals th {
+            text-align: right;
+            background-color: #eee;
+        }
+
+        .invoice-totals .total-row th {
+            background-color: #4CAF50;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .invoice-totals .total-row td {
+            background-color: #4CAF50;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* تذييل الفاتورة */
+        .invoice-footer {
+            margin-top: 50px;
+            padding-top: 15px;
+            border-top: 2px solid #eee;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+
+        .invoice-footer p {
+            margin: 5px 0;
+        }
+
+        /* أنماط الطباعة */
+        @media print {
+            body {
+                background-color: #fff;
+            }
+            .invoice-container {
+                box-shadow: none;
+                border: none;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                min-height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <!-- رأس الفاتورة -->
+        <header class="invoice-header">
+            <div class="header-info">
+                <h1>فاتورة إيجار</h1>
+                <p><strong>رقم الفاتورة:</strong> <span id="invoiceNumber">INV-2024-001</span></p>
+                <p><strong>تاريخ الإصدار:</strong> <span id="invoiceDate">2024-10-25</span></p>
+            </div>
+            <div class="header-logo">
+                <img id="buildingLogo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTEyIDJMMiA3djE1aDIwaC0yVjdoLTEwWiIvPjxwYXRoIGQ9Ik05IDd2MTJoNlY3Ii8+PHBhdGggZD0iTTE2IDd2MTIiLz48cGF0aCBkPSJNOCA3djEyIi8+PC9zdmc+" alt="شعار المبنى">
+                <p><strong><span id="buildingName">اسم المبنى السكني</span></strong></p>
+                <p><span id="buildingAddress">عنوان المبنى، المدينة، الرمز البريدي</span></p>
+                <p>هاتف: <span id="managerPhone">05XXXXXXXX</span></p>
+            </div>
+        </header>
+
+        <!-- تفاصيل الفاتورة -->
+        <section class="invoice-details">
+            <div class="details-box">
+                <h3>معلومات المستأجر</h3>
+                <p><span class="label">الاسم:</span> <span id="residentName">اسم المستأجر</span></p>
+                <p><span class="label">الوحدة:</span> <span id="unitNumber">A-101</span></p>
+                <p><span class="label">العقد:</span> <span id="contractID">C-2024-001</span></p>
+                <p><span class="label">الهاتف:</span> <span id="residentPhone">05XXXXXXXX</span></p>
+            </div>
+            <div class="details-box">
+                <h3>تفاصيل الدفع</h3>
+                <p><span class="label">تاريخ الاستحقاق:</span> <span id="dueDate">2024-11-01</span></p>
+                <p><span class="label">الفترة الإيجارية:</span> <span id="rentalPeriod">من 2024-10-01 إلى 2024-11-01</span></p>
+                <p><span class="label">حالة الدفع:</span> <span id="paymentStatus" style="color: red; font-weight: bold;">غير مدفوعة</span></p>
+                <p><span class="label">طريقة الدفع:</span> <span id="paymentMethod">تحويل بنكي</span></p>
+            </div>
+        </section>
+
+        <!-- جدول الأصناف -->
+        <table class="invoice-table">
+            <thead>
+                <tr>
+                    <th>الوصف</th>
+                    <th>الفترة</th>
+                    <th>المبلغ (<span id="currencyHeader">SAR</span>)</th>
+                </tr>
+            </thead>
+            <tbody id="invoiceItems">
+                <tr>
+                    <td>إيجار شهري للوحدة <span id="itemUnitNumber">A-101</span></td>
+                    <td><span id="itemRentalPeriod">شهر أكتوبر 2024</span></td>
+                    <td id="itemAmount">5,000.00</td>
+                </tr>
+                <!-- يمكن إضافة رسوم أخرى هنا -->
+            </tbody>
+        </table>
+
+        <!-- الإجمالي -->
+        <section class="invoice-totals">
+            <table>
+                <tbody>
+                    <tr>
+                        <th>الإجمالي الفرعي</th>
+                        <td id="subTotal">5,000.00</td>
+                    </tr>
+                    <tr>
+                        <th>الخصومات</th>
+                        <td id="discount">0.00</td>
+                    </tr>
+                    <tr>
+                        <th>الضريبة (0%)</th>
+                        <td id="tax">0.00</td>
+                    </tr>
+                    <tr class="total-row">
+                        <th>المبلغ الإجمالي المستحق</th>
+                        <td id="grandTotal">5,000.00 <span id="currencyFooter">SAR</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ملاحظات -->
+        <section class="invoice-notes" style="margin-top: 30px; padding: 15px; border-top: 1px dashed #ddd;">
+            <p><strong>ملاحظات:</strong></p>
+            <p id="invoiceNotes">يرجى دفع المبلغ المستحق قبل تاريخ الاستحقاق لتجنب رسوم التأخير. شكراً لتعاونكم.</p>
+        </section>
+
+        <!-- تذييل الفاتورة -->
+        <footer class="invoice-footer">
+            <p>شكراً لتعاملك معنا.</p>
+            <p>للاستفسارات، يرجى الاتصال بـ <span id="footerManagerName">اسم المدير</span> على <span id="footerManagerPhone">05XXXXXXXX</span>.</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة المباني السكنية</title>
+    <link rel="stylesheet" href="enhanced-style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body data-theme="light" data-font-size="normal" data-sidebar-position="right">
+    <!-- Login Screen with Building Logo -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo" id="loginLogo">
+                    <!-- سيتم عرض الشعار هنا إذا كان موجوداً -->
+                    <i class="fas fa-building"></i>
+                </div>
+                <h1 id="loginBuildingName">نظام إدارة المباني السكنية</h1>
+                <p>مرحباً بك في نظام إدارة المباني الاحترافي</p>
+            </div>
+            <form id="loginForm" class="login-form">
+                <div class="input-group">
+                    <label for="password">كلمة المرور</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" name="password" placeholder="أدخل كلمة المرور" required>
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+                <button type="submit" class="login-btn">
+                    <span>تسجيل الدخول</span>
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+            </form>
+            <div class="login-footer">
+                <p>كلمة المرور الافتراضية: 123</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="app-container" style="display: none;">
+        <!-- Sidebar with Building Logo -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo" id="sidebarLogo">
+                    <!-- سيتم عرض الشعار هنا إذا كان موجوداً -->
+                    <i class="fas fa-building"></i>
+                    <span id="sidebarBuildingName">إدارة المباني</span>
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul class="nav-menu">
+                    <li class="nav-item active">
+                        <a href="#" class="nav-link" data-page="dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>لوحة التحكم</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-page="units">
+                            <i class="fas fa-home"></i>
+                            <span>إدارة الشقق</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-page="residents">
+                            <i class="fas fa-users"></i>
+                            <span>إدارة السكان</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-page="contracts">
+                            <i class="fas fa-file-contract"></i>
+                            <span>إدارة العقود</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-page="payments">
+                            <i class="fas fa-credit-card"></i>
+                            <span>إدارة المدفوعات</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-page="maintenance">
+                            <i class="fas fa-tools"></i>
+                            <span>إدارة الصيانة</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-page="inventory">
+                            <i class="fas fa-boxes"></i>
+                            <span>إدارة المخزون</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-page="reports">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>التقارير والإحصائيات</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-page="settings">
+                            <i class="fas fa-cog"></i>
+                            <span>الإعدادات</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>تسجيل الخروج</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header with Building Info -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <div class="user-info">
+                        <span>مرحباً، المدير</span>
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="header-building-info">
+                        <div id="headerLogo" class="header-logo">
+                            <!-- سيتم عرض الشعار هنا إذا كان موجوداً -->
+                        </div>
+                        <h1 id="pageTitle">لوحة التحكم</h1>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area" id="contentArea">
+                <!-- Dashboard Content -->
+                <div id="dashboardContent" class="page-content active">
+                    <!-- محتوى لوحة التحكم الحالي -->
+                </div>
+
+                <!-- Units Content -->
+                <div id="unitsContent" class="page-content">
+                    <!-- محتوى إدارة الشقق -->
+                </div>
+
+                <!-- Residents Content -->
+                <div id="residentsContent" class="page-content">
+                    <!-- محتوى إدارة السكان -->
+                </div>
+
+                <!-- Contracts Content -->
+                <div id="contractsContent" class="page-content">
+                    <!-- محتوى إدارة العقود -->
+                </div>
+
+                <!-- Payments Content with Logo Integration -->
+                <div id="paymentsContent" class="page-content">
+                    <!-- سيتم تحميل محتوى الدفعات هنا ديناميكياً -->
+                    <!-- البطاقات ستحتوي على الشعار تلقائياً عبر JavaScript -->
+                </div>
+
+                <!-- Maintenance Content -->
+                <div id="maintenanceContent" class="page-content">
+                    <!-- محتوى إدارة الصيانة -->
+                </div>
+
+                <!-- Inventory Content -->
+                <div id="inventoryContent" class="page-content">
+                    <!-- محتوى إدارة المخزون -->
+                </div>
+
+                <!-- Reports Content -->
+                <div id="reportsContent" class="page-content">
+                    <!-- محتوى التقارير -->
+                </div>
+
+                <!-- Settings Content with Logo Upload -->
+                <div id="settingsContent" class="page-content">
+                    <!-- سيتم تحميل محتوى الإعدادات هنا ديناميكياً -->
+                    <!-- يتضمن واجهة تحميل الشعار -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Container for Invoice Preview -->
+    <div id="invoiceModal" class="modal" style="display: none;">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content invoice-modal-content">
+            <div class="modal-header">
+                <h2>معاينة الفاتورة</h2>
+                <button class="modal-close" onclick="closeInvoiceModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="invoicePreview">
+                <!-- سيتم عرض معاينة الفاتورة هنا -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeInvoiceModal()">إغلاق</button>
+                <button class="btn btn-primary" onclick="downloadInvoice()">
+                    <i class="fas fa-download"></i> تحميل PDF
+                </button>
+                <button class="btn btn-success" onclick="printInvoice()">
+                    <i class="fas fa-print"></i> طباعة
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <!-- Scripts -->
+    <script src="database.js"></script>
+    <script src="app.js"></script>
+    <script src="dashboard.js"></script>
+    <script src="units.js"></script>
+    <script src="residents.js"></script>
+    <script src="contracts.js"></script>
+    <script src="payments.js"></script>
+    <script src="maintenance.js"></script>
+    <script src="reports.js"></script>
+    <script src="analytics.js"></script>
+    <script src="settings.js"></script>
+    <script src="advanced-features.js"></script>
+    
+    <!-- Logo Integration Script -->
+    <script>
+        /**
+         * تحميل وعرض شعار المبنى في جميع أنحاء التطبيق
+         */
+        async function loadBuildingLogo() {
+            try {
+                const settings = await db.getSettings();
+                const buildingLogo = settings.buildingLogo || '';
+                const buildingName = settings.buildingName || 'نظام إدارة المباني السكنية';
+                
+                if (buildingLogo) {
+                    const logoSrc = buildingLogo.startsWith('data:image') ? 
+                        buildingLogo : 
+                        'file://' + buildingLogo;
+                    
+                    // تحديث شعار تسجيل الدخول
+                    const loginLogo = document.getElementById('loginLogo');
+                    if (loginLogo) {
+                        loginLogo.innerHTML = `<img src="${logoSrc}" alt="شعار المبنى" class="building-logo-img">`;
+                    }
+                    
+                    // تحديث شعار الشريط الجانبي
+                    const sidebarLogo = document.getElementById('sidebarLogo');
+                    if (sidebarLogo) {
+                        sidebarLogo.innerHTML = `
+                            <img src="${logoSrc}" alt="شعار المبنى" class="building-logo-img">
+                            <span id="sidebarBuildingName">${buildingName}</span>
+                        `;
+                    }
+                    
+                    // تحديث شعار الرأس
+                    const headerLogo = document.getElementById('headerLogo');
+                    if (headerLogo) {
+                        headerLogo.innerHTML = `<img src="${logoSrc}" alt="شعار المبنى" class="building-logo-img-small">`;
+                    }
+                }
+                
+                // تحديث اسم المبنى
+                const loginBuildingName = document.getElementById('loginBuildingName');
+                if (loginBuildingName) {
+                    loginBuildingName.textContent = buildingName;
+                }
+                
+                const sidebarBuildingName = document.getElementById('sidebarBuildingName');
+                if (sidebarBuildingName) {
+                    sidebarBuildingName.textContent = buildingName;
+                }
+                
+            } catch (error) {
+                console.error('Failed to load building logo:', error);
+            }
+        }
+        
+        /**
+         * تحميل الشعار عند بدء التطبيق
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBuildingLogo();
+            
+            // إعادة تحميل الشعار عند حفظ الإعدادات
+            window.addEventListener('settings-saved', function() {
+                loadBuildingLogo();
+            });
+        });
+        
+        /**
+         * دالة إغلاق نافذة معاينة الفاتورة
+         */
+        function closeInvoiceModal() {
+            const modal = document.getElementById('invoiceModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        /**
+         * دالة تحميل الفاتورة كملف PDF
+         */
+        async function downloadInvoice() {
+            // سيتم تنفيذها في payments.js
+            if (window.Payments && window.Payments.currentInvoiceId) {
+                await window.Payments.printInvoice(window.Payments.currentInvoiceId);
+            }
+        }
+        
+        /**
+         * دالة طباعة الفاتورة
+         */
+        function printInvoice() {
+            const invoicePreview = document.getElementById('invoicePreview');
+            if (invoicePreview) {
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(invoicePreview.innerHTML);
+                printWindow.document.close();
+                printWindow.print();
+            }
+        }
+    </script>
+</body>
+</html>
+
