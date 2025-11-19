@@ -128,13 +128,15 @@ class BuildingManagementApp {
   /**
    * Handle login form submission
    */
-  handleLogin(e) {
+  async handleLogin(e) {
     e.preventDefault();
 
     const passwordInput = document.getElementById("password");
     const password = passwordInput.value;
 
-    if (db.verifyPassword(password)) {
+    const isValid = await db.verifyPassword(password);
+    
+    if (isValid) {
       this.isLoggedIn = true;
       sessionStorage.setItem("isLoggedIn", "true");
       this.showMainApp();
